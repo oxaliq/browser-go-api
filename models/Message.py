@@ -13,7 +13,7 @@ class Message(db.Model):
     content = db.Column(db.String(200))
 
     # foreing key
-    game = db.Column(db.Integer, db.ForeignKey("move.id"))
+    move = db.Column(db.Integer, db.ForeignKey("move.id"))
 
     def __init__(self):
         pass
