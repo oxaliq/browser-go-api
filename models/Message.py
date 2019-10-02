@@ -5,17 +5,15 @@ class Players(enum.Enum):
     BLACK = "The player taking black stones"
     WHITE = "The player taking white stones"
 
-class Branch(db.Model):
+class Message(db.Model):
         __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
-    player = db.Column(db.Enum(Players))
-    x_point = db.Column(db.Integer)
-    y_point = db.Column(db.Integer)
-    move_number = db.Column(db.Integer)
+    date = db.Column(db.DateTime())
+    content = db.Column(db.String(200))
 
-    # foreign keys
-    game = db.Column(db.Integer, db.ForeignKey("game.id"))
+    # foreing key
+    game = db.Column(db.Integer, db.ForeignKey("move.id"))
 
     def __init__(self):
         pass
