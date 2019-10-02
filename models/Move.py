@@ -14,6 +14,7 @@ class Move(db.Model):
     x_point = db.Column(db.Integer)
     y_point = db.Column(db.Integer)
     move_number = db.Column(db.Integer)
+    is_main = db.Column(db.Boolean(), nullable=False, default=True)
 
     # foreign keys
     game = db.Column(db.Integer, db.ForeignKey("games.id"), nullable=False)
