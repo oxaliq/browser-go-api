@@ -4,6 +4,7 @@ import enum
 class Players(enum.Enum):
     BLACK = "The player taking black stones"
     WHITE = "The player taking white stones"
+    VOID = "The game was a draw or voided"
 
 class WinType(enum.Enum):
     DRAW = "The game is a draw"
@@ -13,16 +14,17 @@ class WinType(enum.Enum):
     VOID = "The game was suspended"
 
 class Game(db.Model):
-        __table_args__ = {'extend_existing': True}
+    __tablename__ = "games"
+    __table_args__ = {'extend_existing': True}
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     date = db.Column(db.DateTime())
-    komi = db.Column(db.Decimal(2,1))
-    handicap = db.Column(db.Integer)
-    board_size = db.Column(db.Integer)
+    komi = db.Column(db.Numeric(2,1), nullable=False)
+    handicap = db.Column(db.Integer, nullable=False)
+    board_size = db.Column(db.Integer, nullable=False)
     win_type = db.Column(db.Enum(WinType))
     winner = db.Column(db.Enum(Players))
-    score = db.Column(db.Decimal(2,1))
+    score = db.Column(db.Numeric(2,1))
     white_captures = db.Column(db.Integer)
     black_captures = db.Column(db.Integer)
     application = db.Column(db.String(40))
@@ -30,13 +32,13 @@ class Game(db.Model):
     event = db.Column(db.String(40))
     name = db.Column(db.String(40))
     description = db.Column(db.String(200))
-    round = db.Column(db.Integer())
+    round = db.Column(db.Integer)
     
     # foreign keys
-    # game_room
-    # time_settings
-    # player_black
-    # player_white
+    game_room = db.Column(db.Integer, db.ForeignKey("game_rooms.id"))
+    time_settings = db.Column(db.Integer, db.ForeignKey("time_settings.id"))
+    player_black = db.Column(db.Integer, db.ForeignKey("users.id"))
+    player_white = db.Column(db.Integer, db.ForeignKey("users.id"))
 
     def __init__(self):
         pass

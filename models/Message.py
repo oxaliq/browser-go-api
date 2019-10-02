@@ -6,14 +6,15 @@ class Players(enum.Enum):
     WHITE = "The player taking white stones"
 
 class Message(db.Model):
-        __table_args__ = {'extend_existing': True}
+    __tablename__ = "messages"
+    __table_args__ = {'extend_existing': True}
 
-    id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.DateTime())
-    content = db.Column(db.String(200))
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    date = db.Column(db.DateTime(), nullable=False)
+    content = db.Column(db.String(200), nullable=False)
 
-    # foreing key
-    move = db.Column(db.Integer, db.ForeignKey("move.id"))
+    # foreign key
+    move = db.Column(db.Integer, db.ForeignKey("moves.id"), nullable=False)
 
     def __init__(self):
         pass

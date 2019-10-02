@@ -5,12 +5,14 @@ class Languages(enum.Enum):
     EN: "English"
 
 class GameRoom(db.Model):
-        __table_args__ = {'extend_existing': True}
+    __tablename__ = "game_rooms"
+    __table_args__ = {'extend_existing': True}
 
-    name = db.Column(db.String(40))
-    description = db.Column(db.String(200))
-    private = db.Column(db.Boolean())
-    language = db.Column(db.Enum(Languages))
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(40), nullable=False)
+    description = db.Column(db.String(200), nullable=False)
+    private = db.Column(db.Boolean(), nullable=False, default=False)
+    language = db.Column(db.Enum(Languages), nullable=False)
 
     def __init__(self):
         pass
