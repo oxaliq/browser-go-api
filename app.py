@@ -2,7 +2,7 @@ import os
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-# from flask_marshmallow import Marshmallow
+from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
 
 app = Flask(__name__)
@@ -22,7 +22,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 # init marshmallow
-# ma = Marshmallow(app)
+ma = Marshmallow(app)
 
 # dev server
 DEBUG = True
