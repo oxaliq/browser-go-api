@@ -14,17 +14,15 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# base directory
-basedir = os.path.abspath(os.path.dirname(__file__))
-
-# dev database
-DATABASE = 'postgresql://localhost/browser-go'
-
 # config database
-app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app_settings = os.getenv(    
+    'APP_SETTINGS',
+    'config.DevelopmentConfig'
+)
 
-#init bcrypt
+app.config.from_object(app_settings)
+
+# init bcrypt
 bcrypt = Bcrypt(app)
 
 # init database
@@ -34,12 +32,7 @@ db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
 # init all db models
-from .models.User import User
-from .models.GameRoom import GameRoom
-from .models.TimeSettings import TimeSettings
-from .models.Game import Game
-from .models.Move import Move
-from .models.Message import Message
+import models
 
 migrate = Migrate(app, db)
 
@@ -53,6 +46,12 @@ PORT = 8000
 @app.route('/')
 def hello_world():
     return 'Hello World'
+
+# Blue prints
+from api.api import api
+
+app.register_blueprint(api)
+
 
 if __name__ == '__main__':
     app.run(debug=DEBUG, port=PORT)

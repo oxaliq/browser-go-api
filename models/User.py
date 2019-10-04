@@ -1,4 +1,5 @@
-from ..app import db, ma, bcrypt
+from app import db, ma, bcrypt
+import datetime
 import enum
 
 class Ranks(enum.Enum): # with minimal Elo rating
@@ -39,6 +40,7 @@ class Ranks(enum.Enum): # with minimal Elo rating
     K28 = "Twenty-Eight Kyu"
     K29 = "Twenty-Nine Kyu"
     K30 = "Thirty Kyu" # Elo -900
+    RU = "Unknown Rank"
 
 class User(db.Model):
     __tablename__ = "users"
@@ -52,7 +54,10 @@ class User(db.Model):
     elo = db.Column(db.Integer)
     rank_certainty = db.Column(db.Boolean, nullable=False, default=False)
 
-    def __init__(self):
+    def __init__(self, email, password, admin=False,):
+        self.email = email
         self.password = bcrypt.generate_password_hash(
             password, app.config.get('BCRYPT_LOG_ROUNDS')
         ).decode()
+        self.registered_on = datetime.datetime.now()
+        self.admin = admin
