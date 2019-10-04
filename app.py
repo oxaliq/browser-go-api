@@ -14,15 +14,13 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# base directory
-basedir = os.path.abspath(os.path.dirname(__file__))
-
-# dev database
-DATABASE = 'postgresql://localhost/browser-go'
-
 # config database
-app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app_settings = os.getenv(    
+    'APP_SETTINGS',
+    'project.server.config.DevelopmentConfig'
+)
+
+app.config.from_object(app_settings)
 
 #init bcrypt
 bcrypt = Bcrypt(app)
@@ -53,6 +51,9 @@ PORT = 8000
 @app.route('/')
 def hello_world():
     return 'Hello World'
+
+@app.route('/api')
+
 
 if __name__ == '__main__':
     app.run(debug=DEBUG, port=PORT)
