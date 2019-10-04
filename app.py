@@ -17,12 +17,12 @@ CORS(app)
 # config database
 app_settings = os.getenv(    
     'APP_SETTINGS',
-    'project.server.config.DevelopmentConfig'
+    'config.DevelopmentConfig'
 )
 
 app.config.from_object(app_settings)
 
-#init bcrypt
+# init bcrypt
 bcrypt = Bcrypt(app)
 
 # init database
@@ -32,12 +32,7 @@ db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
 # init all db models
-from .models.User import User
-from .models.GameRoom import GameRoom
-from .models.TimeSettings import TimeSettings
-from .models.Game import Game
-from .models.Move import Move
-from .models.Message import Message
+import models
 
 migrate = Migrate(app, db)
 
@@ -52,7 +47,10 @@ PORT = 8000
 def hello_world():
     return 'Hello World'
 
-@app.route('/api')
+# Blue prints
+from api.api import api
+
+app.register_blueprint(api)
 
 
 if __name__ == '__main__':

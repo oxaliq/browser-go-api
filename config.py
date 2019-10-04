@@ -1,4 +1,4 @@
-
+import os
 # local db
 DATABASE = 'postgresql://localhost/browser-go'
 
