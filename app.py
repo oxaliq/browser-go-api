@@ -49,9 +49,10 @@ def hello_world():
 
 # Blue prints
 from api.api import api
+from auth.auth import auth
 
 app.register_blueprint(api)
-
+app.register_blueprint(auth)
 
 if __name__ == '__main__':
     app.run(debug=DEBUG, port=PORT)
