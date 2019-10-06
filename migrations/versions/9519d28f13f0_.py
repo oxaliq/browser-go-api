@@ -39,7 +39,7 @@ def upgrade():
     op.create_table('users',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('email', sa.String(length=255), nullable=False),
-    sa.Column('password', sa.DateTime(), nullable=False),
+    sa.Column('password', sa.Integer(length=255), nullable=False),
     sa.Column('registered_on', sa.DateTime(), nullable=False),
     sa.Column('admin', sa.Boolean(), nullable=False),
     sa.Column('rank', sa.Enum('D7', 'D6', 'D5', 'D4', 'D3', 'D2', 'D1', 'K1', 'K2', 'K3', 'K4', 'K5', 'K6', 'K7', 'K8', 'K9', 'K10', 'K11', 'K12', 'K13', 'K14', 'K15', 'K16', 'K17', 'K18', 'K19', 'K20', 'K21', 'K22', 'K23', 'K24', 'K25', 'K26', 'K27', 'K28', 'K29', 'K30', name='ranks'), nullable=True),

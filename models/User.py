@@ -1,4 +1,6 @@
-from database import db, ma, bcrypt
+from database import db, ma
+from app import bcrypt
+from configuration import config
 import datetime
 import enum
 import jwt
@@ -48,7 +50,7 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(255), unique=True, nullable=False)
-    password = db.Column(db.DateTime, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
     registered_on = db.Column(db.DateTime, nullable=False)
     admin = db.Column(db.Boolean, nullable=False, default=False)
     rank = db.Column(db.Enum(Ranks))
@@ -56,10 +58,13 @@ class User(db.Model):
     rank_certainty = db.Column(db.Boolean, nullable=False, default=False)
 
     def __init__(self, email, password, admin=False,):
+        print('user init')
         self.email = email
+        print('user email init')
         self.password = bcrypt.generate_password_hash(
-            password, app.config.get('BCRYPT_LOG_ROUNDS')
+            password, 13
         ).decode()
+        print('user password init')
         self.registered_on = datetime.datetime.now()
         self.admin = admin
 
@@ -96,3 +101,17 @@ class User(db.Model):
             return 'Signature expired. Please log in again.'
         except jwt.InvalidTokenError:
             return 'Invalid token. Please log in again.'
+
+class UserSchema(ma.ModelSchema):
+    class Meta:
+        fields = (
+            'id', 
+            'name', 
+            'registered_on', 
+            'rank', 
+            'rank_certainty', 
+            'elo'
+        )
+
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)

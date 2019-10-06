@@ -4,10 +4,19 @@ import unittest
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
-from app import app, db
+from database import db
+from app import create_app
+app = create_app()
 
 migrate = Migrate(app, db)
 manager = Manager(app)
+
+from models.Game import Game
+from models.GameRoom import GameRoom
+from models.Message import Message
+from models.Move import Move
+from models.TimeSettings import TimeSettings
+from models.User import User
 
 # migrations
 manager.add_command('db', MigrateCommand)
