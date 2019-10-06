@@ -1,8 +1,10 @@
 from database import db, ma
+from marshmallow import fields
 from app import bcrypt
 from configuration import config
 import datetime
 import enum
+import json
 import jwt
 
 class Ranks(enum.Enum): # with minimal Elo rating
@@ -58,7 +60,9 @@ class User(db.Model):
     elo = db.Column(db.Integer)
     rank_certainty = db.Column(db.Boolean, nullable=False, default=False)
 
-    def __init__(self, username, email, password, rank='RU', admin=False):
+    def __init__(self, username, email, password, rank=Ranks.K1, admin=False):
+        print(rank)
+        print(Ranks)
         self.username = username
         self.email = email
         self.password = bcrypt.generate_password_hash(
@@ -103,16 +107,14 @@ class User(db.Model):
             return 'Invalid token. Please log in again.'
 
 class UserSchema(ma.ModelSchema):
-    class Meta:
-        fields = (
-            'id', 
-            'username',
-            'email', 
-            'registered_on', 
-            'rank', 
-            'rank_certainty', 
-            'elo'
-        )
+    id = fields.Int()
+    username = fields.Str()
+    email = fields.Str()
+    registered_on = fields.Date()
+    rank = fields.Str()
+    rank_certainty = fields.Bool()
+    elo = fields.Int()
+        
 
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
