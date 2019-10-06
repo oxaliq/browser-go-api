@@ -1,4 +1,4 @@
-from app import db, ma, bcrypt
+from database import db, ma, bcrypt
 import datetime
 import enum
 import jwt

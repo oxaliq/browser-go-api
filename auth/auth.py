@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, session
-import models
-
+from models import User
+print(User)
 auth = Blueprint('auth', __name__, url_prefix='/auth')
 
 @auth.route('/signup', methods=['POST'])

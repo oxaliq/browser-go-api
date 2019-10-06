@@ -3,7 +3,6 @@ from .users.user_endpoint import UserEndpoint
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
-
 @api.route('/home', methods=['GET'])
 def api_home():
     response = {"message": "home page"}
