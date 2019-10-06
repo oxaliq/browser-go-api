@@ -49,6 +49,7 @@ class User(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.String(255), unique=True, nullable=False, autoincrement=True)
     email = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     registered_on = db.Column(db.DateTime, nullable=False)
@@ -57,14 +58,13 @@ class User(db.Model):
     elo = db.Column(db.Integer)
     rank_certainty = db.Column(db.Boolean, nullable=False, default=False)
 
-    def __init__(self, email, password, admin=False,):
-        print('user init')
+    def __init__(self, username, email, password, rank='RU', admin=False):
+        self.username = username
         self.email = email
-        print('user email init')
         self.password = bcrypt.generate_password_hash(
             password, 13
         ).decode()
-        print('user password init')
+        self.rank = rank
         self.registered_on = datetime.datetime.now()
         self.admin = admin
 
@@ -106,7 +106,8 @@ class UserSchema(ma.ModelSchema):
     class Meta:
         fields = (
             'id', 
-            'name', 
+            'username',
+            'email', 
             'registered_on', 
             'rank', 
             'rank_certainty', 
