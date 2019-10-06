@@ -1,5 +1,4 @@
 from flask import Blueprint, request, jsonify, session
-
 from database import db
 from models.User import User
 
@@ -13,20 +12,14 @@ def auth_signup():
         user = User.query.filter_by(username=data.get('username')).first()
         if not user:
             try:
-                print('getting here 1')
-                print(data)
                 user = User(
                     username = data['username'],
                     email = data['email'],
                     password = data['password'],
                 )
-                print('getting here 2')
                 db.session.add(user)
-                print('wtf')
                 db.session.commit()
-                print('user')
                 auth_token = user.encode_auth_token(user.id)
-                print('getting here 4')
                 response = {
                     'status': 'success',
                     'message': 'Succesfully registered.',
@@ -54,5 +47,26 @@ def auth_signup():
 
 @auth.route('/login', methods=['POST'])
 def auth_login():
-    response = {"message": "login post"}
-    return jsonify(response)
+    # get the post data
+    data = request.get_json()
+    try:
+        # fetch the user data
+        print('getting here')
+        user = User.query.filter_by(email=data['email']).first()
+        print(user.username)
+        auth_token = user.encode_auth_token(user.id)
+        print(auth_token)
+        if auth_token:
+            response = {
+                'status': 'success',
+                'message': 'Successfully logged in.',
+                'auth_token': auth_token.decode()
+            }
+            return jsonify(response), 200
+    except Exception as e:
+        print(e)
+        response = {
+            'status': 'fail',
+            'message': 'Try again'
+        }
+        return jsonify(response), 500

@@ -6,6 +6,7 @@ import datetime
 import enum
 import json
 import jwt
+import os
 
 class Ranks(enum.Enum): # with minimal Elo rating
     D7 = "Seven Dan" # Elo 2700+
@@ -85,7 +86,7 @@ class User(db.Model):
             }
             return jwt.encode(
                 payload,
-                app.config.get('SECRET_KEY'),
+                os.environ.get('SECRET_KEY'),
                 algorithm='HS256'
             )
         except Exception as e:
@@ -99,7 +100,7 @@ class User(db.Model):
         :return: integer|string
         """
         try:
-            payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
+            payload = jwt.decode(auth_token, os.environ.get('SECRET_KEY'))
             return payload['sub']
         except jwt.ExpiredSignatureError:
             return 'Signature expired. Please log in again.'
