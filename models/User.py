@@ -106,7 +106,8 @@ class UserSchema(ma.ModelSchema):
     class Meta:
         fields = (
             'id', 
-            'name', 
+            'name',
+            'email', 
             'registered_on', 
             'rank', 
             'rank_certainty', 
