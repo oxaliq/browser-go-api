@@ -1,9 +1,12 @@
 from database import db, ma
+from marshmallow import fields
 from app import bcrypt
 from configuration import config
 import datetime
 import enum
+import json
 import jwt
+import os
 
 class Ranks(enum.Enum): # with minimal Elo rating
     D7 = "Seven Dan" # Elo 2700+
@@ -58,7 +61,9 @@ class User(db.Model):
     elo = db.Column(db.Integer)
     rank_certainty = db.Column(db.Boolean, nullable=False, default=False)
 
-    def __init__(self, username, email, password, rank='RU', admin=False):
+    def __init__(self, username, email, password, rank=Ranks.K1, admin=False):
+        print(rank)
+        print(Ranks)
         self.username = username
         self.email = email
         self.password = bcrypt.generate_password_hash(
@@ -81,7 +86,7 @@ class User(db.Model):
             }
             return jwt.encode(
                 payload,
-                app.config.get('SECRET_KEY'),
+                os.environ.get('SECRET_KEY'),
                 algorithm='HS256'
             )
         except Exception as e:
@@ -95,7 +100,7 @@ class User(db.Model):
         :return: integer|string
         """
         try:
-            payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
+            payload = jwt.decode(auth_token, os.environ.get('SECRET_KEY'))
             return payload['sub']
         except jwt.ExpiredSignatureError:
             return 'Signature expired. Please log in again.'
@@ -103,16 +108,14 @@ class User(db.Model):
             return 'Invalid token. Please log in again.'
 
 class UserSchema(ma.ModelSchema):
-    class Meta:
-        fields = (
-            'id', 
-            'username',
-            'email', 
-            'registered_on', 
-            'rank', 
-            'rank_certainty', 
-            'elo'
-        )
+    id = fields.Int()
+    username = fields.Str()
+    email = fields.Str()
+    registered_on = fields.Date()
+    rank = fields.Str()
+    rank_certainty = fields.Bool()
+    elo = fields.Int()
+        
 
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)

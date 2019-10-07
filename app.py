@@ -10,7 +10,8 @@ from flask_cors import CORS
 
 def create_app():
     app = Flask(__name__)
-    CORS(app, origins="http://localhost:3004")
+    CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"},
+    r"/auth/*": {"origins": "http://localhost:3000"}})
     app.config['CORS_HEADERS'] = 'Content-Type'
     app.config.from_object(DevelopmentConfig)
     db.init_app(app)
