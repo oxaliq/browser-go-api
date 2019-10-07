@@ -13,12 +13,12 @@ app = Flask(__name__)
 bcrypt = Bcrypt(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config.from_object(DevelopmentConfig)
-socketio = SocketIO(app)
-
+socketio = SocketIO(app, cors_allowed_origins="http://localhost:3000")
+# cors_allowed_origins="http://localhost:3000"
 def create_app():
     CORS(app, resources={
         r"/api/*": {"origins": "http://localhost:3000"},
-        r"/auth/*": {"origins": "http://localhost:3000"}
+        r"/auth/*": {"origins": "http://localhost:3000"},
     })
     db.init_app(app)
     ma.init_app(app)
