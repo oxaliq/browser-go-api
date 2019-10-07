@@ -23,7 +23,7 @@ def auth_signup():
                 response = {
                     'status': 'success',
                     'message': 'Succesfully registered.',
-                    'auth_token': auth_token.decode()
+                    'token': auth_token.decode()
                 }
                 return jsonify(response), 201
             except Exception as e:
@@ -60,7 +60,7 @@ def auth_login():
             response = {
                 'status': 'success',
                 'message': 'Successfully logged in.',
-                'auth_token': auth_token.decode()
+                'token': auth_token.decode()
             }
             return jsonify(response), 200
     except Exception as e:
