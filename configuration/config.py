@@ -14,7 +14,7 @@ class DevelopmentConfig(BaseConfig):
     DEBUG = True
     BCRYPT_LOG_ROUNDS = 4
     SQLALCHEMY_DATABASE_URI = DATABASE
-    PORT = 8000
+    PORT = 5000
 
 
 class TestingConfig(BaseConfig):
