@@ -11,3 +11,7 @@ def api_home():
 @api.route('/users')
 def api_users():
     return jsonify(UserEndpoint.users())
+
+@api.route('/user')
+def api_user():
+    return jsonify(UserEndpoint.user())
