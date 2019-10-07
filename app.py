@@ -16,8 +16,10 @@ app.config.from_object(DevelopmentConfig)
 socketio = SocketIO(app)
 
 def create_app():
-    CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"},
-    r"/auth/*": {"origins": "http://localhost:3000"}})
+    CORS(app, resources={
+        r"/api/*": {"origins": "http://localhost:3000"},
+        r"/auth/*": {"origins": "http://localhost:3000"}
+    })
     db.init_app(app)
     ma.init_app(app)
     return app

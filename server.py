@@ -1,4 +1,4 @@
-from app import create_app, db
+from app import create_app, db, socketio
 
 # Blueprints
 from api.api import api
@@ -14,4 +14,4 @@ if __name__ == '__main__':
     app.register_blueprint(api)
     app.register_blueprint(auth)
     migrate = Migrate(app, db)
-    app.run(port=8000, debug=True)
+    socketio.run(app)
