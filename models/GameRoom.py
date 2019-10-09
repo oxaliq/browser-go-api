@@ -1,8 +1,14 @@
 from app import db, ma
+#   TODO    User >---< GameRoom
 import enum
 
+game_rooms_users = db.Table('game_rooms_users',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
+    db.Column('game_rooms_id', db.Integer, db.ForeignKey('game_rooms.id'), primary_key=True)
+)
+
 class Languages(enum.Enum):
-    EN: "English"
+    EN = "English"
 
 class GameRoom(db.Model):
     __tablename__ = "game_rooms"
@@ -14,5 +20,16 @@ class GameRoom(db.Model):
     private = db.Column(db.Boolean(), nullable=False, default=False)
     language = db.Column(db.Enum(Languages), nullable=False)
 
-    def __init__(self):
-        pass
+    # ! Foreign Keys
+    users = db.relationship(
+        'User', 
+        secondary=game_rooms_users, 
+        lazy='subquery',
+        backref=db.backref('game_rooms', lazy=True)
+        )
+
+    def __init__(self, name, description, private=False, language=Languages.EN):
+        self.name = name
+        self.description = description
+        self.private = private
+        self.language = language
