@@ -5,7 +5,7 @@ from ..decorators import jwt_required
 
 api_rooms = Blueprint('api_rooms', __name__, url_prefix='/api/rooms')
 
-@api_rooms.route('/<id>', methods=['GET'])
+@api_rooms.route('/<room_id>', methods=['GET'])
 def get_room():
     pass
 
