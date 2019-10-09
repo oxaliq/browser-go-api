@@ -46,7 +46,7 @@ class Ranks(enum.Enum): # with minimal Elo rating
     K28 = "Twenty-Eight Kyu"
     K29 = "Twenty-Nine Kyu"
     K30 = "Thirty Kyu" # Elo -900
-    RU = "Unknown Rank"
+    UR = "Unknown Rank"
 
 class User(db.Model):
     __tablename__ = "users"
@@ -61,9 +61,7 @@ class User(db.Model):
     elo = db.Column(db.Integer)
     rank_certainty = db.Column(db.Boolean, nullable=False, default=False)
 
-    def __init__(self, username, email, password, rank=Ranks.K1, admin=False):
-        print(rank)
-        print(Ranks)
+    def __init__(self, username, email, password, rank=Ranks.UR, admin=False):
         self.username = username
         self.email = email
         self.password = bcrypt.generate_password_hash(

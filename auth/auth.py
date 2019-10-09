@@ -52,6 +52,7 @@ def auth_login():
     try:
         # fetch the user data
         print('getting here')
+        print(data)
         user = User.query.filter_by(email=data['email']).first()
         print(user.username)
         auth_token = user.encode_auth_token(user.id)
