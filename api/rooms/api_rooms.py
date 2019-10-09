@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, session
 from models.User import User, user_schema, users_schema
-from models.GameRoom import GameRoom
+from models.GameRoom import GameRoom, rooms_schema, room_schema
 from database import db
 from ..decorators import jwt_required
 
@@ -12,7 +12,8 @@ def get_room():
 
 @api_rooms.route('/', methods=['GET'])
 def get_rooms():
-    response = {"status" : "success"}
+    rooms = GameRoom.query.all()
+    response = rooms_schema.dumps(rooms)
     return jsonify(response)
 
 # protected route

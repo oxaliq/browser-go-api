@@ -1,4 +1,5 @@
 from app import db, ma
+from marshmallow import fields
 #   TODO    User >---< GameRoom
 
 # ! Game Room >-< Users join table
@@ -40,3 +41,21 @@ class GameRoom(db.Model):
         self.description = description
         self.private = private
         self.language = language
+
+class LanguageSchema(ma.ModelSchema):
+    id = fields.Int()
+    name = fields.Str()
+    iso = fields.Str()
+
+language_schema = LanguageSchema()
+
+class RoomSchema(ma.ModelSchema):
+    id = fields.Int()
+    name = fields.Str()
+    description = fields.Str()
+    private = fields.Bool()
+    language = fields.Nested(LanguageSchema)
+        
+
+room_schema = RoomSchema()
+rooms_schema = RoomSchema(many=True)
