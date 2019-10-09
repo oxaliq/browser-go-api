@@ -1,31 +1,18 @@
 from flask import Blueprint, request, jsonify, session
-from .users.user_endpoint import UserEndpoint
-from .users.room_endpoint import RoomEndpoint
+from .users.api_users import api_users
+from .rooms.api_rooms import api_rooms
 
 api = Blueprint('api', __name__, url_prefix='/api')
+
+def register_api_endpoints(app):
+    app.register_blueprint(api_users)
+    app.register_blueprint(api_rooms)
+    app.register_blueprint(api)
+    return app
 
 @api.route('/home', methods=['GET'])
 def api_home():
     response = {"message": "home page"}
     return jsonify(response)
 
-@api.route('/users', methods=['GET'])
-def api_get_users():
-    return jsonify(UserEndpoint.users())
 
-@api.route('/user', methods=['GET'])
-def api_get_user():
-    return jsonify(UserEndpoint.user())
-
-@api.route('/rooms', methods=['GET'])
-def api_get_rooms():
-    return RoomEndpoint.get_rooms()
-
-@api.route('/room', methods=['GET'])
-def api_get_room():
-    return RoomEndpoint.get_room()
-
-# protected route
-@api.route('/room', methods=['POST'])
-def api_post_room():
-    return pass
