@@ -9,12 +9,12 @@ def handle_connection():
     
     cool
     ''')
-    emit('message', {'data':'connection'})
+    emit('message', {'data':'connection'}, broadcast=True)
 
 @socketio.on('message')
 def handle_message(message):
     print(message)
-    emit('message return', {'message':'a message was sent'}, broadcast=True)
+    emit('init namespace', {'namespace':'newroom'})
 
 @socketio.on('connect', namespace='/newroom')
 def handle_connection():
