@@ -1,5 +1,6 @@
 from models.User import User, user_schema, users_schema
 from flask import Blueprint, request, json, session, jsonify
+from ..decorators import jwt_required
 
 api_users = Blueprint('api_users', __name__, url_prefix='/api')
 
@@ -10,7 +11,9 @@ def api_get_users():
     response = users_schema.dumps(users)
     return jsonify(response)
 
+
 @api_users.route('/users/account', methods=['GET'])
+@jwt_required()
 def api_get_user():
     print('called')
     auth_header = request.headers.get('Authorization') or None
