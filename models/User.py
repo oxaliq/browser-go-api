@@ -61,7 +61,7 @@ class User(db.Model):
     elo = db.Column(db.Integer)
     rank_certainty = db.Column(db.Boolean, nullable=False, default=False)
 
-    def __init__(self, username, email, password, rank=Ranks.UR, admin=False):
+    def __init__(self, username, email, password, rank=Ranks.K1, admin=False):
         self.username = username
         self.email = email
         self.password = bcrypt.generate_password_hash(

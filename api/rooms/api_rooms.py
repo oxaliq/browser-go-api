@@ -1,6 +1,7 @@
+from flask import Blueprint, request, jsonify, session
 from models.User import User, user_schema, users_schema
 from models.GameRoom import GameRoom
-from flask import Blueprint, request, jsonify, session
+from database import db
 from ..decorators import jwt_required
 
 api_rooms = Blueprint('api_rooms', __name__, url_prefix='/api/rooms')
@@ -18,13 +19,16 @@ def get_rooms():
 @api_rooms.route('/', methods=['POST'])
 @jwt_required()
 def post_room():
+    print('Hey it\'s a POST request')
     data = request.get_json()
+    print(data)
     try:
         room = GameRoom(
         name = data['name'],
         description = data['description'],
-        private = data['private'],
-        language = data['language']
+        #  TODO add support for private rooms and multiple languages
+        # private = data['private'],
+        # language = data['language']
         )
         db.session.add(room)
         db.session.commit()
