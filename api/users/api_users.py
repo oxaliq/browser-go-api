@@ -9,7 +9,7 @@ def api_get_users():
     print('called one')
     users = User.query.all()
     response = users_schema.dumps(users)
-    return jsonify(response)
+    return jsonify(response), 200
 
 
 @api_users.route('/users/account', methods=['GET'])

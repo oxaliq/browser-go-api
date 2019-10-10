@@ -1,21 +1,24 @@
 from app import db, ma
+from marshmallow import fields
 import enum
+from models.User import user_schema
 
-class Players(enum.Enum):
-    BLACK = "The player taking black stones"
-    WHITE = "The player taking white stones"
-    VOID = "The game was a draw or voided"
-
-class WinType(enum.Enum):
-    DRAW = "The game is a draw"
-    RESIGN = "The game ended in resignation"
-    SCORE = "The game ended by counting points"
-    TIME = "The game ended in loss by time out"
-    VOID = "The game was suspended"
 
 class Game(db.Model):
     __tablename__ = "games"
     __table_args__ = {'extend_existing': True}
+    
+    class Players(enum.Enum):
+        BLACK = "The player taking black stones"
+        WHITE = "The player taking white stones"
+        VOID = "The game was a draw or voided"
+
+    class WinType(enum.Enum):
+        DRAW = "The game is a draw"
+        RESIGN = "The game ended in resignation"
+        SCORE = "The game ended by counting points"
+        TIME = "The game ended in loss by time out"
+        VOID = "The game was suspended"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     date = db.Column(db.DateTime())
@@ -40,5 +43,23 @@ class Game(db.Model):
     player_black = db.Column(db.Integer, db.ForeignKey("users.id"))
     player_white = db.Column(db.Integer, db.ForeignKey("users.id"))
 
-    def __init__(self):
-        pass
+    def __init__(self, name, description, board_size, game_room, player_white, komi=0.5, handicap=0, time_settings=1):
+        self.name = name
+        self.description = description
+        self.board_size = board_size
+        self.game_room = game_room
+        self.player_white = player_white
+        self.komi = komi
+        self.handicap = handicap
+        self.time_settings = time_settings
+        print('did it')
+
+class GameSchema(ma.ModelSchema):
+    id = fields.Int()
+    name = fields.Str()
+    description = fields.Str()
+    boardSize = fields.Int()
+    player = fields.Nested(user_schema)
+
+game_schema = GameSchema()
+games_schema = GameSchema(many=True)

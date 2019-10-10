@@ -1,13 +1,14 @@
 from app import db, ma
 import enum
 
-class Players(enum.Enum):
-    BLACK = "The player taking black stones"
-    WHITE = "The player taking white stones"
 
 class Move(db.Model):
     __tablename__ = "moves"
     __table_args__ = {'extend_existing': True}
+
+    class Players(enum.Enum):
+        BLACK = "The player taking black stones"
+        WHITE = "The player taking white stones"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     player = db.Column(db.Enum(Players))
