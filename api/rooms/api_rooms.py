@@ -1,14 +1,18 @@
 from flask import Blueprint, request, jsonify, session
 from models.User import User, user_schema, users_schema
 from models.GameRoom import GameRoom, rooms_schema, room_schema
+from models.Game import Game, games_schema
 from database import db
 from ..decorators import jwt_required
 
 api_rooms = Blueprint('api_rooms', __name__, url_prefix='/api/rooms')
 
 @api_rooms.route('/<room_id>', methods=['GET'])
-def get_room():
-    pass
+def get_room(room_id):
+    print(room_id)
+    games = Game.query.filter_by(game_room=room_id).all()
+    response = games_schema.dumps(games)
+    return jsonify(response)
 
 @api_rooms.route('/', methods=['GET'])
 def get_rooms():
@@ -25,11 +29,11 @@ def post_room():
     print(data)
     try:
         room = GameRoom(
-        name = data['name'],
-        description = data['description'],
-        #  TODO add support for private rooms and multiple languages
-        # private = data['private'],
-        # language = data['language']
+            name = data['name'],
+            description = data['description'],
+            #  TODO add support for private rooms and multiple languages
+            # private = data['private'],
+            # language = data['language']
         )
         db.session.add(room)
         db.session.commit()
@@ -40,6 +44,7 @@ def post_room():
         }
         return jsonify(response), 201
     except Exception as e:
+        print(e)
         print(e.__dict__)
         response = {
             'status': 'fail',
