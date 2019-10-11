@@ -15,7 +15,6 @@ from models.Game import Game
 from models.GameRoom import GameRoom
 from models.Message import Message
 from models.Move import Move
-from models.TimeSettings import TimeSettings
 from models.User import User
 
 # migrations
