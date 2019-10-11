@@ -7,7 +7,7 @@ from ..decorators import jwt_required
 import jwt
 import os
 import json
-from websockets.socket import new_game_notice
+from websockets.socket import new_game_notice, join_game_notice
 
 api_games = Blueprint('api_games', __name__, url_prefix='/api/games')
 
@@ -16,20 +16,20 @@ def get_room(game_id):
     print(game_id)
     game = Game.query.filter_by(id=game_id).first()
     response = game_schema.dumps(game)
-    # join_game_notice(game_id)
+    # TODO create decorator that returns user from header
+    auth_header = request.headers.get('Authorization')
+    user = jwt.decode(auth_header.split(" ")[1], os.environ.get('SECRET_KEY'))['user']
+    print(user)
+    join_game_notice(game_id, user)
     return jsonify(response)
 
 @api_games.route('/', methods=['POST'])
 @jwt_required()
 def post_game():
-    print('Hey it\'s a post request!')
     data = request.get_json()
     # TODO create decorator that returns user from header
     auth_header = request.headers.get('Authorization')
     user = jwt.decode(auth_header.split(" ")[1], os.environ.get('SECRET_KEY'))['user']
-    print(user)
-    print('data')
-    print(data)
     user_id = json.loads(user)['id']
     try:
         game = Game(
@@ -39,12 +39,8 @@ def post_game():
             game_room = data['gameRoom'],
             player_white = user_id
         )
-        print(game)
         db.session.add(game)
-        print('game added')
         db.session.commit()
-        print('game')
-        print(game_schema.dumps(game))
         new_game_notice(room=game.game_room, game=game_schema.dumps(game))
         response = {
             'status': 'success',
