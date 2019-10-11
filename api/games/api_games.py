@@ -1,12 +1,13 @@
 from flask import Blueprint, request, jsonify, session
 from models.User import User, user_schema, users_schema
 from models.GameRoom import GameRoom, rooms_schema, room_schema
-from models.Game import Game
+from models.Game import Game, game_schema
 from database import db
 from ..decorators import jwt_required
 import jwt
 import os
 import json
+from websockets.socket import new_game_notice
 
 api_games = Blueprint('api_games', __name__, url_prefix='/api/games')
 
@@ -35,7 +36,8 @@ def post_game():
         print('game added')
         db.session.commit()
         print('game')
-        print(game)
+        print(game_schema.dumps(game))
+        new_game_notice(room=game.game_room, game=game_schema.dumps(game))
         response = {
             'status': 'success',
             'message': 'Game created',

@@ -23,3 +23,24 @@ def handle_connection():
     look cool a namespaced socketio connection!
 
     ''')
+
+def join_room_notice(room):
+    @socketio.on('connect', namespace=f'/{room}')
+    def handle_connection():
+        print(f'joined room at {room}')
+        emit('join room', {'roomspace': f'{room}'})
+    @socketio.on('join room', namespace=f'/{room}')
+    def connect_room(message):
+        print(f'connected with ${message}')
+        emit('connected', {'roomspace': f'/{room}'})
+
+def new_game_notice(room, game):
+    socketio.emit('new game', game, broadcast=True, namespace=f'/{room}')
+
+
+def new_room_notice(room):
+    socketio.emit('new room', room, broadcast=True)
+
+# @socketio.on
+# def room_socket(roomspace):
+#     pass

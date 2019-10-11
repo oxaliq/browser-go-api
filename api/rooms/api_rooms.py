@@ -4,6 +4,7 @@ from models.GameRoom import GameRoom, rooms_schema, room_schema
 from models.Game import Game, games_schema
 from database import db
 from ..decorators import jwt_required
+from websockets.socket import new_room_notice, join_room_notice
 
 api_rooms = Blueprint('api_rooms', __name__, url_prefix='/api/rooms')
 
@@ -12,6 +13,7 @@ def get_room(room_id):
     print(room_id)
     games = Game.query.filter_by(game_room=room_id).all()
     response = games_schema.dumps(games)
+    join_room_notice(room_id)
     return jsonify(response)
 
 @api_rooms.route('/', methods=['GET'])
@@ -40,8 +42,8 @@ def post_room():
         response = {
             'status': 'success',
             'message': 'Succesfully registered.',
-            'gameRoom': room.id
         }
+        new_room_notice(room_schema.dumps(room))
         return jsonify(response), 201
     except Exception as e:
         print(e)
