@@ -35,9 +35,7 @@ def join_room_notice(room):
         emit('connected', {'roomspace': f'/{room}'})
 
 def new_game_notice(room, game):
-    @socketio.on('connect', namespace=f'/{room}')
-    def emit_game(game):
-        pass
+    socketio.emit('new game', game, broadcast=True, namespace=f'/{room}')
 
 
 def new_room_notice(room):
