@@ -11,6 +11,14 @@ from websockets.socket import new_game_notice
 
 api_games = Blueprint('api_games', __name__, url_prefix='/api/games')
 
+@api_games.route('/<game_id>', methods=['GET'])
+def get_room(game_id):
+    print(game_id)
+    game = Game.query.filter_by(id=game_id).first()
+    response = game_schema.dumps(game)
+    # join_game_notice(game_id)
+    return jsonify(response)
+
 @api_games.route('/', methods=['POST'])
 @jwt_required()
 def post_game():

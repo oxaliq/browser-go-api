@@ -77,7 +77,7 @@ class GameSchema(ma.ModelSchema):
     id = fields.Int()
     name = fields.Str()
     description = fields.Str()
-    boardSize = fields.Int()
+    board_size = fields.Int()
     player = fields.Nested(user_schema)
 
 game_schema = GameSchema()
