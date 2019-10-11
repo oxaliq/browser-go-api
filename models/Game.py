@@ -55,7 +55,7 @@ class Game(db.Model):
     overtime_length = db.Column(db.Integer) # seconds
     
     # foreign keys
-    game_room_id = db.Column(db.Integer, db.ForeignKey("game_rooms.id"))
+    game_room = db.Column(db.Integer, db.ForeignKey("game_rooms.id"))
     player_black = db.Column(db.Integer, db.ForeignKey("users.id"))
     player_white = db.Column(db.Integer, db.ForeignKey("users.id"))
 

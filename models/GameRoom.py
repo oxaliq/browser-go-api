@@ -22,27 +22,18 @@ class GameRoom(db.Model):
     private = db.Column(db.Boolean(), nullable=False, default=False)
     language = db.Column(db.Enum(Languages), nullable=False, default=Languages.EN)
 
-    
-
     def __init__(self, name, description, private=False, language=Languages.EN):
         self.name = name
         self.description = description
         self.private = private
         self.language = language
 
-class LanguageSchema(ma.ModelSchema):
-    id = fields.Int()
-    name = fields.Str()
-    iso = fields.Str()
-
-language_schema = LanguageSchema()
-
 class RoomSchema(ma.ModelSchema):
     id = fields.Int()
     name = fields.Str()
     description = fields.Str()
     private = fields.Bool()
-    language = fields.Nested(LanguageSchema)
+    language = fields.Str()
         
 
 room_schema = RoomSchema()

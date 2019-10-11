@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: b077aaee9ec8
+Revision ID: 45f01fb15e26
 Revises: 
-Create Date: 2019-10-10 17:38:14.900202
+Create Date: 2019-10-10 17:50:40.846864
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'b077aaee9ec8'
+revision = '45f01fb15e26'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -70,10 +70,10 @@ def upgrade():
     sa.Column('overtime', sa.Enum('BYOYOMI', 'ABSOLUTE', 'HOURGLASS', 'NONE', name='timetypes'), nullable=False),
     sa.Column('overtime_period', sa.Integer(), nullable=True),
     sa.Column('overtime_length', sa.Integer(), nullable=True),
-    sa.Column('game_room_id', sa.Integer(), nullable=True),
+    sa.Column('game_room', sa.Integer(), nullable=True),
     sa.Column('player_black', sa.Integer(), nullable=True),
     sa.Column('player_white', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['game_room_id'], ['game_rooms.id'], ),
+    sa.ForeignKeyConstraint(['game_room'], ['game_rooms.id'], ),
     sa.ForeignKeyConstraint(['player_black'], ['users.id'], ),
     sa.ForeignKeyConstraint(['player_white'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -93,18 +93,18 @@ def upgrade():
     sa.Column('move_number', sa.Integer(), nullable=True),
     sa.Column('is_pass', sa.Boolean(), nullable=False),
     sa.Column('is_main', sa.Boolean(), nullable=False),
-    sa.Column('game_id', sa.Integer(), nullable=False),
-    sa.Column('preceding_move_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['game_id'], ['games.id'], ),
-    sa.ForeignKeyConstraint(['preceding_move_id'], ['moves.id'], ),
+    sa.Column('game', sa.Integer(), nullable=False),
+    sa.Column('preceding_move', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['game'], ['games.id'], ),
+    sa.ForeignKeyConstraint(['preceding_move'], ['moves.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('messages',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('date', sa.DateTime(), nullable=False),
     sa.Column('content', sa.String(length=200), nullable=False),
-    sa.Column('move_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['move_id'], ['moves.id'], ),
+    sa.Column('move', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['move'], ['moves.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
