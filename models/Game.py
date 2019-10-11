@@ -3,6 +3,11 @@ from marshmallow import fields
 import enum
 from models.User import user_schema
 
+# ! Games >-< Users join table
+games_users = db.Table('games_users',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
+    db.Column('game_rooms_id', db.Integer, db.ForeignKey('games.id'), primary_key=True)
+)
 
 class Game(db.Model):
     __tablename__ = "games"
@@ -20,6 +25,12 @@ class Game(db.Model):
         TIME = "The game ended in loss by time out"
         VOID = "The game was suspended"
 
+    class TimeTypes(enum.Enum):
+        BYOYOMI = "Counting by time period"
+        ABSOLUTE = "One period to use time"
+        HOURGLASS = "Absolute time for both players"
+        NONE = "Untimed"
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     date = db.Column(db.DateTime())
     komi = db.Column(db.Numeric(2,1), nullable=False)
@@ -36,14 +47,22 @@ class Game(db.Model):
     name = db.Column(db.String(40))
     description = db.Column(db.String(200))
     round = db.Column(db.Integer)
+    main_time = db.Column(db.Enum(TimeTypes), nullable=False)
+    time_period = db.Column(db.Integer) # number of periods
+    period_length = db.Column(db.Integer) # seconds
+    overtime = db.Column(db.Enum(TimeTypes), nullable=False)
+    overtime_period = db.Column(db.Integer) # number of overtime periods
+    overtime_length = db.Column(db.Integer) # seconds
     
     # foreign keys
     game_room = db.Column(db.Integer, db.ForeignKey("game_rooms.id"))
-    time_settings = db.Column(db.Integer, db.ForeignKey("time_settings.id"))
     player_black = db.Column(db.Integer, db.ForeignKey("users.id"))
     player_white = db.Column(db.Integer, db.ForeignKey("users.id"))
 
-    def __init__(self, name, description, board_size, game_room, player_white, komi=0.5, handicap=0, time_settings=1):
+    def __init__(
+        self, name, description, board_size, game_room, player_white, 
+        komi=0.5, handicap=0, main_time=TimeTypes.NONE, overtime=TimeTypes.NONE
+    ):
         self.name = name
         self.description = description
         self.board_size = board_size
@@ -51,8 +70,8 @@ class Game(db.Model):
         self.player_white = player_white
         self.komi = komi
         self.handicap = handicap
-        self.time_settings = time_settings
-        print('did it')
+        self.main_time = main_time
+        self.overtime = overtime
 
 class GameSchema(ma.ModelSchema):
     id = fields.Int()

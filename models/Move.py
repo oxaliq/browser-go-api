@@ -22,5 +22,11 @@ class Move(db.Model):
     game = db.Column(db.Integer, db.ForeignKey("games.id"), nullable=False)
     preceding_move = db.Column(db.Integer, db.ForeignKey("moves.id"))
 
+    succeeding_moves = db.relationship(
+        'Move',
+        lazy='subquery',
+        backref=db.backref('moves', lazy=True)
+    )
+
     def __init__(self):
         pass
