@@ -1,5 +1,6 @@
 import os
 # local db
+# ! Environment Variable
 DATABASE = 'postgresql://localhost/browser-go'
 
 class BaseConfig:
