@@ -26,7 +26,7 @@ if __name__ == '__main__':
     migrate = Migrate(app, db)
     socketio.run(app, debug=True)
     
-def server():
+def run():
     app = create_app()
     register_api_endpoints(app)
     app.register_blueprint(server)
