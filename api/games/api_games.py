@@ -19,7 +19,12 @@ def get_room(game_id):
     # TODO create decorator that returns user from header
     auth_header = request.headers.get('Authorization')
     user = jwt.decode(auth_header.split(" ")[1], os.environ.get('SECRET_KEY'))['user']
-    print(user)
+    user = json.loads(user)
+    if not game.player_black and game.player_white != user['id']:
+        game.player_black = user['id']
+        db.session.add(game)
+        db.session.commit()
+        print(game_schema.dumps(game))
     join_game_notice(game_id, user)
     return jsonify(response)
 
