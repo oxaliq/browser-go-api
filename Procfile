@@ -1,2 +1,2 @@
-gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -w 1 server:server
+gunicorn --worker-class eventlet -w 1 module:app
 release: python manage.py db upgrade
