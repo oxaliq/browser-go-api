@@ -10,8 +10,6 @@ from websockets.socket import socketio
 import configuration.models_mount
 from flask_migrate import Migrate
 
-
-
 if __name__ == '__main__':
     app = create_app()
     register_api_endpoints(app)

@@ -29,6 +29,9 @@ def handle_connection():
 # ! Game Room Messages
 
 def join_room_notice(room):
+    @socketio.on('connect', namespace=f'/{room}')
+    def room_socket_mount():
+        print(f'/{room} socket mounted')
     @socketio.on('join room', namespace=f'/{room}')
     def connect_room(message):
         print(f'connected with ${message}')
