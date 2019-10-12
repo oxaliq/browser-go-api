@@ -4,7 +4,7 @@ from models.GameRoom import GameRoom, rooms_schema, room_schema
 from models.Game import Game, games_schema
 from database import db
 from ..decorators import jwt_required
-from websockets.socket import new_room_notice, join_room_notice
+from websockets.roomSocket import new_room_notice, join_room_notice
 
 api_rooms = Blueprint('api_rooms', __name__, url_prefix='/api/rooms')
 

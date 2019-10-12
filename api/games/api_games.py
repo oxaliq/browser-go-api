@@ -7,7 +7,7 @@ from ..decorators import jwt_required
 import jwt
 import os
 import json
-from websockets.socket import new_game_notice, join_game_notice
+from websockets.roomSocket import new_game_notice, join_game_notice
 
 api_games = Blueprint('api_games', __name__, url_prefix='/api/games')
 
