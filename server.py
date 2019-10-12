@@ -5,7 +5,7 @@ from api.api import register_api_endpoints
 from auth.auth import auth
 
 # Web sockets
-from websockets.socket import socketio
+from websockets.socket import socketio 
 
 import configuration.models_mount
 from flask_migrate import Migrate
