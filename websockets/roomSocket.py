@@ -18,19 +18,16 @@ def new_game_notice(room, game):
 def new_room_notice(room):
     socketio.emit('new room', room, broadcast=True)
 
-def join_game_notice(game_id, user):
-    @socketio.on('join game')
+def join_game_notice(game):
+    print('join game')
+    print(game)
+    black = user_schema.dumps(User.query.filter_by(id=game.player_black).first())
+    white = user_schema.dumps(User.query.filter_by(id=game.player_white).first())
+    room_id = game.game_room
+    game_id = game.id
+    print(black)
+    @socketio.on('join game', namespace=f'/{room_id}')
     def handle_join_game(data):
-        print(data)
-        game_id = data['game']
-        user_id = data['user']
-        game = Game.query.filter_by(id=game_id).first()
-        print('join game')
-        print(game)
-        print(game['player_black'])
+        print('emit join game')
         join_room(game_id)
-        if not game['player_black']:
-            game['player_black'] = user
-            user = user_schema.dumps(User.query.filter_by(id=user_id).first())
-            emit('new player', {'black': user}, broadcast=True)
-        emit('join game', data, room=f'game')
+        emit('join game', {'black': black, 'white': white}, broadcast=True)
