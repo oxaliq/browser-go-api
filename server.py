@@ -25,6 +25,7 @@ if __name__ == '__main__':
     app.register_blueprint(server)
     migrate = Migrate(app, db)
     socketio.run(app, debug=True)
+    return app
     
 def run():
     app = create_app()
@@ -32,3 +33,4 @@ def run():
     app.register_blueprint(server)
     migrate = Migrate(app, db)
     socketio.run(app, debug=False)
+    return app
