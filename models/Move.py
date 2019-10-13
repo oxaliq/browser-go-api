@@ -19,7 +19,7 @@ class Move(db.Model):
     is_main = db.Column(db.Boolean, nullable=False, default=True)
 
     # foreign keys
-    game = db.Column(db.Integer, db.ForeignKey("games.id"), nullable=False)
+    game = db.Column(db.ForeignKey("games.id"), nullable=False)
     preceding_move = db.Column(db.Integer, db.ForeignKey("moves.id"))
 
     succeeding_moves = db.relationship(
