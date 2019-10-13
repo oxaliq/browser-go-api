@@ -22,11 +22,23 @@ class Move(db.Model):
     game = db.Column(db.ForeignKey("games.id"), nullable=False)
     preceding_move = db.Column(db.Integer, db.ForeignKey("moves.id"))
 
-    succeeding_moves = db.relationship(
-        'Move',
-        lazy='subquery',
-        backref=db.backref('moves', lazy=True)
-    )
 
-    def __init__(self):
-        pass
+    def __init__(self, game_id, player, x_point, y_point, move_number, is_pass=True, is_main=True, preceding_move=None):
+        self.game = game_id
+        if player == 'black': 
+            self.player = 'BLACK'
+        else:
+            self.player = 'WHITE'
+        self.x_point = x_point
+        self.y_point = y_point
+        self.move_number = move_number
+        self.is_pass = is_pass
+        self.is_main = is_main
+        self.preceding_move = preceding_move
+
+Move.succeeding_moves = db.relationship(
+    'Move',
+    lazy='subquery',
+    backref=db.backref('moves', lazy=True),
+    remote_side=Move.id
+)
