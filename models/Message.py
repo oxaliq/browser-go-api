@@ -15,7 +15,7 @@ class Message(db.Model):
     content = db.Column(db.String(200), nullable=False)
 
     # foreign key
-    move = db.Column(db.Integer, db.ForeignKey("moves.id"), nullable=False)
+    move = db.Column(db.ForeignKey("moves.id"), nullable=False)
 
     def __init__(self):
         pass
