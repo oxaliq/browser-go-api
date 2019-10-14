@@ -1,7 +1,7 @@
 from app import db, ma
-from marshmallow import fields
+from marshmallow import fields, Schema, pre_dump
 import enum
-from models.User import user_schema
+from models.User import UserSchema, user_schema, User
 
 # ! Games >-< Users join table
 games_users = db.Table('games_users',
@@ -55,9 +55,9 @@ class Game(db.Model):
     overtime_length = db.Column(db.Integer) # seconds
     
     # foreign keys
-    game_room = db.Column(db.Integer, db.ForeignKey("game_rooms.id"))
-    player_black = db.Column(db.Integer, db.ForeignKey("users.id"))
-    player_white = db.Column(db.Integer, db.ForeignKey("users.id"))
+    game_room = db.Column(db.ForeignKey("game_rooms.id"))
+    player_black = db.Column(db.ForeignKey("users.id"))
+    player_white = db.Column(db.ForeignKey("users.id"))
 
     def __init__(
         self, name, description, board_size, game_room, player_white, 
@@ -73,13 +73,17 @@ class Game(db.Model):
         self.main_time = main_time
         self.overtime = overtime
 
-class GameSchema(ma.ModelSchema):
+class GameSchema(ma.Schema):
     id = fields.Int()
     name = fields.Str()
     description = fields.Str()
     board_size = fields.Int()
-    player = fields.Nested(user_schema)
     game_room = fields.Int()
+    # TODO change players to fields.Nested(UserSchema) 
+    # TODO when you figure out why it's not working
+    player_black = fields.Int()
+    player_white = fields.Int()
 
+        
 game_schema = GameSchema()
 games_schema = GameSchema(many=True)
