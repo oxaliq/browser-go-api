@@ -8,8 +8,12 @@ from database import db
 from app import create_app
 app = create_app()
 
+
 migrate = Migrate(app, db)
 manager = Manager(app)
+
+# migrations
+manager.add_command('db', MigrateCommand)
 
 from models.Game import Game
 from models.GameRoom import GameRoom
@@ -17,10 +21,8 @@ from models.Message import Message
 from models.Move import Move
 from models.User import User
 
-# migrations
-manager.add_command('db', MigrateCommand)
 
-
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/browser-go'
 @manager.command
 def test():
     """Runs the unit tests without test coverage."""

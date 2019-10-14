@@ -9,18 +9,31 @@ import os
 import json
 from websockets.roomSocket import new_game_notice, join_game_notice
 
+from marshmallow import pprint
+
 api_games = Blueprint('api_games', __name__, url_prefix='/api/games')
 
 @api_games.route('/<game_id>', methods=['GET'])
 def get_room(game_id):
     print(game_id)
     game = Game.query.filter_by(id=game_id).first()
-    response = game_schema.dumps(game)
     # TODO create decorator that returns user from header
     auth_header = request.headers.get('Authorization')
     user = jwt.decode(auth_header.split(" ")[1], os.environ.get('SECRET_KEY'))['user']
-    print(user)
-    join_game_notice(game_id, user)
+    user = json.loads(user)
+    # add user to game if open position available
+    if user and not game.player_black and game.player_white != user['id']:
+        game.player_black = user['id']
+        db.session.add(game)
+        db.session.commit()
+    print(game.player_black)
+    join_game_notice(game)
+    response = {'game': game_schema.dumps(game)}
+    if game.player_black:
+        response['black'] = user_schema.dumps(User.query.filter_by(id=game.player_black).first())
+    else:
+        response['black'] = ''
+    response['white'] = user_schema.dumps(User.query.filter_by(id=game.player_white).first())
     return jsonify(response)
 
 @api_games.route('/', methods=['POST'])

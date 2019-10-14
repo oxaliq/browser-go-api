@@ -1,5 +1,5 @@
 from database import db, ma
-from marshmallow import fields
+from marshmallow import fields, Schema
 from app import bcrypt
 from configuration import config
 import datetime
@@ -63,7 +63,7 @@ class User(db.Model):
     rank_certainty = db.Column(db.Boolean, nullable=False, default=False)
 
 
-    def __init__(self, username, email, password, rank=Ranks.K1, admin=False):
+    def __init__(self, username, email, password, rank=Ranks.UR, admin=False):
         self.username = username
         self.email = email
         self.password = bcrypt.generate_password_hash(
@@ -107,7 +107,7 @@ class User(db.Model):
         except jwt.InvalidTokenError:
             return 'Invalid token. Please log in again.'
 
-class UserSchema(ma.ModelSchema):
+class UserSchema(Schema):
     id = fields.Int()
     username = fields.Str()
     email = fields.Str()
@@ -116,6 +116,8 @@ class UserSchema(ma.ModelSchema):
     rank_certainty = fields.Bool()
     elo = fields.Int()
         
+    class Meta:
+        register=True
 
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
