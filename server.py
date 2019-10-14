@@ -26,3 +26,4 @@ if __name__ == '__main__':
     migrate = Migrate(app, db)
     socketio.run(app, debug=False)
     
+ 
