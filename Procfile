@@ -1,2 +1,2 @@
-web: gunicorn --worker-class eventlet -w 1 server:server
+web: gunicorn server:server
 release: python manage.py db upgrade
