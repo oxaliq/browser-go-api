@@ -84,6 +84,6 @@ class GameSchema(ma.Schema):
     player_black = fields.Int()
     player_white = fields.Int()
 
-        
+    
 game_schema = GameSchema()
 games_schema = GameSchema(many=True)
