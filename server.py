@@ -1,4 +1,5 @@
 from app import create_app, db
+import os
 
 # Blueprints
 from api.api import register_api_endpoints
