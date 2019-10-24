@@ -26,7 +26,6 @@ def get_room(game_id):
         game.player_black = user['id']
         db.session.add(game)
         db.session.commit()
-    print(game.player_black)
     join_game_notice(game)
     response = {'game': game_schema.dumps(game)}
     if game.player_black:
