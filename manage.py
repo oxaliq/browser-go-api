@@ -22,7 +22,7 @@ from models.Move import Move
 from models.User import User
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/browser-go'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 @manager.command
 def test():
     """Runs the unit tests without test coverage."""

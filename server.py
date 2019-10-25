@@ -26,7 +26,7 @@ app.register_blueprint(server)
 migrate = Migrate(app, db)
 # added 10/14
 DATABASE_URL = os.environ['DATABASE_URL']
-# conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 if __name__ == '__main__':
     socketio.run(app, debug=False)

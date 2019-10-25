@@ -18,7 +18,7 @@ app.config.from_object(os.getenv('CONFIGURATION_OBJECT'))
 # ! Environment Variable
 # TODO export ALLOWED_ORIGIN= whatever the react server is
 # TODO cors_allowed_origins=os.getenv('ALLOWED_ORIGIN')
-socketio = SocketIO(app, cors_allowed_origins=['http://localhost:3000', 'http://localhost:3001'])
+socketio = SocketIO(app, cors_allowed_origins=os.getenv('ALLOWED_ORIGIN'))
 
 def create_app():
     CORS(app, resources={
@@ -28,3 +28,4 @@ def create_app():
     db.init_app(app)
     ma.init_app(app)
     return app
+    
